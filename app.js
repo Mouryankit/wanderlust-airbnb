@@ -100,7 +100,6 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
     let {statusCode = 500, message = "Something error found"} = err; 
     res.render("Error.ejs", {message}); 
- 
 });
 
 
