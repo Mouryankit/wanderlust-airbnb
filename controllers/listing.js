@@ -1,6 +1,7 @@
 //  adding asynchronous functions of listing.js files 
 
 const Listing = require("../models/listing.js")
+const axios = require("axios");
 
 module.exports.index = async(req, res) => {
     const allListing = await Listing.find({});
@@ -29,19 +30,68 @@ module.exports.showListings = async (req, res) => {
     res.render("listings/show.ejs", {listing}); 
 }
 
-module.exports.createListing = async (req, res, next) => {
-        let url = req.file.path;
-        let filename = req.file.filename;
-        // console.log(url, " , ", filename);
 
-        const newListing = new Listing(req.body.listing);
-        // console.log(req.user);
-        newListing.owner = req.user._id;
-        newListing.image = {url, filename};
-        await newListing.save();
-        req.flash("success", "New Listing Created!");
-        res.redirect("/listings");
-}
+module.exports.createListing = async (req, res, next) => {
+  try {
+    const locationText = req.body.listing.location;
+
+    if (!locationText) {
+      req.flash("error", "Location is required");
+      return res.redirect("/listings/new");
+    }
+
+    // Call Nominatim API
+    const response = await axios.get(
+      "https://nominatim.openstreetmap.org/search",
+      {
+        params: {
+          q: locationText,
+          format: "json",
+          limit: 1,
+        },
+        headers: {
+          "User-Agent": "wanderlust-app",
+        },
+      }
+    );
+
+    if (response.data.length === 0) {
+      req.flash("error", "Location not found");
+      return res.redirect("/listings/new");
+    }
+
+    // Extract longitude & latitude
+    const longitude = parseFloat(response.data[0].lon);
+    const latitude = parseFloat(response.data[0].lat);
+
+    // Create GeoJSON object
+    const geoData = {
+      name:locationText,
+      type: "Point",
+      coordinates: [longitude, latitude], //  long first
+    };
+
+    // Handle uploaded image
+    const url = req.file.path;
+    const filename = req.file.filename;
+
+    // Create new listing
+    const newListing = new Listing(req.body.listing);
+
+    newListing.owner = req.user._id;
+    newListing.image = { url, filename };
+    newListing.location = geoData;
+    
+
+    await newListing.save();
+
+    req.flash("success", "New Listing Created!");
+    res.redirect("/listings");
+
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports.rednderEditForm = async (req, res) => {
     let {id} = req.params;

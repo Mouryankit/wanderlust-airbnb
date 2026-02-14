@@ -16,7 +16,18 @@ const listingSchema = new Schema({
         filename: String,
     },
     price: Number,
-    location: String,
+    location: {
+        name: String,
+        type: {
+            type: String,
+            enum: ["Point"],
+            required: true
+        },
+        coordinates: {
+            type: [Number],  // [longitude, latitude]
+            required: true
+        }
+    },
     country: String,
     reviews: [{
         type: Schema.Types.ObjectId,
