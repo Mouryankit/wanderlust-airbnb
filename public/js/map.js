@@ -3,7 +3,9 @@ const listingString = mapElement.dataset.listing;
 const listing = JSON.parse(listingString);
 const long = listing.location.coordinates[0]; 
 const lat = listing.location.coordinates[1]; 
-console.log(lat, long)
+const listingTitle = listing.title; 
+// console.log(lat, long)
+// console.log(listing.title);
 
 var map = L.map('map').setView([lat, long], 10); // indore
 
@@ -15,8 +17,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // Add marker
 L.marker([lat, long])
     .addTo(map)
-    .bindPopup("Hello ")
+    .bindPopup(listingTitle)
     .openPopup();
 
-console.log(listing); 
+// console.log(listing); 
 
