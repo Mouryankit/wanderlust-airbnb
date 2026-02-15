@@ -18,12 +18,16 @@
     padding: 0.5rem 3rem 0.5rem 3rem;
     font-size: 0.8rem;
   }
+  .user-info{
+    margin-top: 8px;
+    margin-left: 4px;
+  }
 </style>
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top navbar-toggler-width" id="#navbar">
+  <div class="container-fluid ">
     <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" id="navbarCollapseButton">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -31,12 +35,12 @@
         <a class="nav-link" href="/listings">Explore</a>
       </div>
       <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search">
-          <input class="form-control me-2 search-input" type="search" placeholder="Search destination" aria-label="Search"/>
+        <form class="d-flex" role="search" action="/listings/search">
+          <input class="form-control me-2 search-input" type="search" placeholder="Search destination" aria-label="Search" name="query"/>
           <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
         </form>
       </div>
-      <div class="navbar-nav ms-auto">
+      <div class=" navbar-nav ms-auto">
         <a class="nav-link" href="/listings/new">Airbnb Your Home</a>
         <% if(!currentUser) {%>
           <a class="nav-link" href="/signup"><b>Sign up</b></a>
@@ -44,6 +48,7 @@
         <% } %>
         <% if(currentUser) {%>
           <a class="nav-link" href="/logout">Log out</a>
+          <p class="user-info"><%= currentUser.username %></p>
         <% } %>
       </div>
     </div>

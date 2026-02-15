@@ -5,26 +5,26 @@ if(process.env.NODE_ENV != "production"){
 
 
 
-
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
 const Listing = require("../models/listing.js");
-const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
+const { isLoggedIn, isOwner, validateListing, uploadListingImage } = require("../middleware.js");
 const listingController = require("../controllers/listing.js"); 
-// multer is used to parse the form data of a file 
-const multer  = require('multer')
 
-const {storage} = require("../cloudConfig.js");
-const upload = multer({ storage }) //store this in the upload folder this may be any drive link
 
+
+// Search Route
+router.get("/search", wrapAsync(listingController.searchListings));
+router.get("/category/:category", listingController.filterByCategory);
 
 //  "/"  -> path
 router.route("/")
     .get(wrapAsync(listingController.index))  // index route
     .post(      //create route
         isLoggedIn, 
-        upload.single('listing[image]'),
+        // upload.single('listing[image]'),
+        uploadListingImage,
         validateListing,         
         wrapAsync(listingController.createListing)
     );
@@ -37,6 +37,7 @@ router.get(
 );
 
 
+
 router.route("/:id")
     .get( // show route 
         wrapAsync(listingController.showListings)
@@ -44,7 +45,8 @@ router.route("/:id")
     .put(   // update route
         isLoggedIn,
         isOwner, 
-        upload.single('listing[image]'),
+        // upload.single('listing[image]'),
+        uploadListingImage,
         validateListing, 
         wrapAsync(listingController.updateListing)
     )
@@ -62,4 +64,3 @@ router.get(
 );
 
 module.exports = router;
-

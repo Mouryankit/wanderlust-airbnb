@@ -15,9 +15,10 @@
         <div class="card-body mt-3">
             <p class="card-text">Owned by <%= listing.owner.username %></p>
             <p class="card-text"><%= listing.description %></p>
-            <p class="card-text"><%= listing.price.toLocaleString("en-IN") %></p>
+            <p class="card-text"><%= listing.price.toLocaleString("en-IN") %>  &nbsp;Rs.</p>
             <p class="card-text"><%= listing.location.name %></p>
             <p class="card-text"><%= listing.country %></p>
+            <p class="card-text"><%= listing.category %></p>
         </div>
     </div>
 
@@ -39,7 +40,7 @@
         <hr>
         <h4>Leave a Review</h4>
         <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
-            
+
             <fieldset class="starability-slot">
                 <legend>Rating:</legend>
                 <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
@@ -71,7 +72,6 @@
         </form>
         <% } %>
     
-    
         <% if(listing.reviews.length > 0){ %>
             <hr/>
             <div class="row">
@@ -82,22 +82,26 @@
                         <h5 class="card-title">@<%= review.author.username %></h5>
                         <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
                         <p class="card-text"><%= review.comment %></p>
-                        <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
-                            <button class="btn btn-dark btn-sm">Delete</button>
-                        </form>
+                        
+
+                        <% if(currentUser && currentUser._id.equals(review.author._id)){ %>
+                            <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                                <button class="btn btn-dark btn-sm">Delete</button>
+                            </form>
+                        <% } %>
+
                     </div>
                 </div>
             <% } %>
-
             </div>
         <% } %>
-        </div>
-        <div class="col-6 offset-3 mb-3">
-            <h3>Where you'll be </h3>
-            <div id="map" data-listing='<%- JSON.stringify(listing) %>'></div>
-        </div>
+        
     </div>
-    
+    <div class="col-6 offset-3 mb-3">
+        <h3>Where you'll be </h3>
+
+        <div id="map" data-listing='<%- JSON.stringify(listing) %>'></div>
+    </div>
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

@@ -1,18 +1,20 @@
-
-
 <% layout('/layouts/boilerplate.ejs') -%> 
-
     <style>
         #filters {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
+            /* justify-content: center; */
+            justify-content: space-between;
         }
         .filter {
+            text-decoration: none;
+            color: rgb(31, 31, 31);
             text-align: center;
             margin-top: 2rem;
             margin-right: 2rem;
             opacity: 0.7;
+
         }
         .filter:hover {
             opacity: 1;
@@ -29,56 +31,69 @@
             border-radius: 1rem;
             height: 3.2rem;
             padding: 1rem;
-            margin-left: 5rem;
             display: flex;
             align-items: center;
         }
     </style>
+
     <div id="filters">
-        <div class="filter">
+        <a href="/listings" class="filter ">
+            <div><i class="fa-solid fa-border-all"></i></div>
+            <p >All</p>
+        </a>
+        <a href="/listings/category/Trending" class="filter">
             <div><i class="fa-solid fa-fire"></i></div>
             <p>Trending</p>
-        </div>
-        <div class="filter">
+        </a>
+        <a href="/listings/category/Rooms" class="filter">
             <div><i class="fa-solid fa-bed"></i></div>
             <p>Rooms</p>
-        </div>
-        <div class="filter">
+        </a>
+        <a href="/listings/category/Iconic Cities" class="filter">
             <div><i class="fa-solid fa-mountain-city"></i></div>
             <p>Iconic Cities</p>
-        </div>
-        <div class="filter">
+        </a>
+        <a href="/listings/category/Mountains" class="filter">
             <div><i class="fa-solid fa-mountain"></i></div>
             <p>Mountains</p>
-        </div>
-        <div class="filter">
+        </a>
+        <a href="/listings/category/Castles" class="filter">
             <div><i class="fa-brands fa-fort-awesome"></i></div>
             <p>Castles</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-person-swimming"></i></div>
-            <p>Amazing Pools</p>
-        </div>
-        <div class="filter">
+        </a>
+        <a href="/listings/category/Camping" class="filter">
             <div><i class="fa-solid fa-campground"></i></div>
             <p>Camping</p>
-        </div>
-        <div class="filter">
+        </a>
+        <a href="/listings/category/Farms" class="filter">
             <div><i class="fa-solid fa-tractor"></i></div>
             <p>Farms</p>
-        </div>
-        <div class="filter">
+        </a>
+        <a href="/listings/category/Actic" class="filter">
             <div><i class="fa-solid fa-snowflake"></i></div>
             <p>Actic</p>
-        </div>
-        <div class="filter">
+        </a>
+        <a href="/listings/category/Domes" class="filter">
             <div><i class="fa-solid fa-igloo"></i></div>
             <p>Domes</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-sailboat"></i></div>
+        </a>
+        <a href="/listings/category/Boats" class="filter">
+            <i class="fa-solid fa-sailboat"></i>
             <p>Boats</p>
-        </div>
+        </a>
+        <a href="/listings/category/Beach" class="filter">
+            <i class="fa-solid fa-umbrella-beach"></i>
+            <p>Beach</p>
+        </a>
+        <a href="/listings/category/City" class="filter">
+            <i class="fa-solid fa-city"></i>
+            <p>City</p>
+        </a>
+        <a href="/listings/category/Forest" class="filter">
+            <i class="fa-solid fa-tree"></i>
+            <p>Forest</p>
+        </a >
+
         <div class="tax-toggle">
             <div class="form-check-reverse form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
@@ -86,11 +101,11 @@
             </div>
         </div>
     </div>
-    
+
     
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
         <% for(let listing of allListing){ %>
-            <a href="listings/<%=listing._id%>" class="listing-link">
+            <a href="/listings/<%=listing._id%>" class="listing-link">
                 <div class="listing-card card col">
                     <img src="<%=listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem">
                     <div class="card-img-overlay"></div>
@@ -105,7 +120,6 @@
             </a>
         <%}%>
     </div>
-    
     
 
 <script>

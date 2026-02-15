@@ -1,4 +1,21 @@
 
+// adding category features
+const categories = [
+   "Trending",
+   "Rooms",
+   "Iconic Cities",
+   "Mountains",
+   "Castles",
+   "Camping",
+   "Farms",
+   "Arctic",
+   "Domes",
+   "Boats",
+   "Beach",
+   "City",
+   "Forest",
+];
+
 
 // after adding owner
 const mongoose = require("mongoose"); 
@@ -37,6 +54,11 @@ const listingSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref:"User",
     },
+    category: {
+      type: String,
+      required: true,
+      enum: categories,
+   },
 });
 
 // middleware to delete all reviews associated with a listing when listing is deleted

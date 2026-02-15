@@ -2,6 +2,8 @@ const Listing = require("./models/listing");
 const Review = require("./models/review"); 
 const ExpressError = require("./utils/ExpressError.js");
 const {listingSchema,reviewSchema} = require("./schema.js");
+const multer = require("multer");
+const { storage } = require("./cloudConfig.js");
 
 module.exports.isLoggedIn = (req, res, next) => {
     // console.log("REQ.USER...", req.user);
@@ -67,4 +69,35 @@ module.exports.isreviewAuthor = async(req, res, next) => {
         return res.redirect(`/listings/${id}`);
     }
     next(); 
+};
+
+
+// multur logic to set the image uploaiding limit
+
+const upload = multer({
+    storage,
+    limits: { fileSize: 2 * 1024 * 1024 } // 2MB limit
+});
+
+
+module.exports.uploadListingImage = async(req, res, next) => {
+    await upload.single("listing[image]")(req, res, function (err) {
+        if (err) {
+            if (err.code === "LIMIT_FILE_SIZE") {
+                req.flash("error", "File too large! Max 2MB allowed.");
+            } else {
+                req.flash("error", err.message);
+            }
+
+            // req.flash("error", "File too large! Max 2MB allowed.");
+            //  If updating listing (has id)
+            if (req.params.id) {
+                return res.redirect(`/listings/${req.params.id}/edit`);
+            }
+
+            //  If creating listing (no id)
+            return res.redirect("/listings/new");
+        }
+        next();
+    });
 };
