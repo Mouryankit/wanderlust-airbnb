@@ -146,7 +146,7 @@ module.exports.searchListings = async (req, res) => {
 
     // 1 Validate query
     if (!query || query.trim() === "") {
-        req.flash("error", "Please enter something to search!");
+        req.flash("error", "Please enter something valid to search!");
         return res.redirect("/listings");
     }
 
